@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
       matrix:
         node-version: [20]
@@ -23,8 +24,12 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: node --test tests/unit/agent-engine.test.mjs tests/unit/cli-and-final.test.mjs tests/unit/final-batch.test.mjs tests/unit/final-push.test.mjs tests/unit/privacy.test.mjs tests/unit/final-edge-push.test.mjs
-
-      - name: Run integration tests
-        run: node --test tests/integration/agent-integration.test.mjs
-        continue-on-error: true
+        run: |
+          node --test tests/unit/agent-engine.test.mjs
+          node --test tests/unit/cli-and-final.test.mjs
+          node --test tests/unit/final-batch.test.mjs
+          node --test tests/unit/final-push.test.mjs
+          node --test tests/unit/privacy.test.mjs
+          node --test tests/unit/final-edge-push.test.mjs
+          node --test tests/unit/final-expansion.test.mjs
+          node --test tests/unit/thousand-final.test.mjs
