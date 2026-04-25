@@ -9,14 +9,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: ${{ matrix.node-version }}
 
-      - run: npm ci
+      - name: Run unit tests
+        run: node --test tests/unit/*.test.mjs
 
-      - run: npm test
+      - name: Run integration tests
+        run: node --test tests/integration/*.test.mjs
+
+      - name: Count total tests
+        run: |
+          echo "=== Test Summary ==="
+          for f in tests/unit/*.test.mjs tests/integration/*.test.mjs; do
+            count=$(grep -c "it(" "$f" 2>/dev/null || echo 0)
+            echo "  $f: $count tests"
+          done
