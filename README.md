@@ -87,7 +87,7 @@ Three built-in presets with granular policy types:
 
 ## Test Suite
 
-620 tests across 7 files. Run with:
+1058 tests across 12 files. Run with:
 
 ```bash
 node --test tests/unit/agent-engine.test.mjs      # 116 tests
